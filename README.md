@@ -29,3 +29,8 @@ docker build -t IMAGE_NAME .
 ```bash
 docker run -v /local_folder:/job IMAGE_NAME spark-submit [options] /job/<python file> [app arguments]
 ```
+
+## Credits
+Thanks for all the contributors of godatadriven/pyspark.
+
+https://github.com/godatadriven-dockerhub/pyspark

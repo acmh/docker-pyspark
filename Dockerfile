@@ -30,38 +30,22 @@ ENV PYSPARK_PYTHON="${MINICONDA_HOME}/bin/python"
 ENV PATH="${MINICONDA_HOME}/bin:${HADOOP_HOME}/bin:${PATH}"
 ENV LD_LIBRARY_PATH="$HADOOP_HOME/lib/native"
 
-# Install basic dependencies
 RUN set -ex && \
 	apt-get update && \
-    apt-get install -y curl bzip2 --no-install-recommends
-
-# Install Miniconda
-RUN set -ex && \
+    apt-get install -y curl bzip2 --no-install-recommends && \
     curl -s -L --url "https://repo.continuum.io/miniconda/Miniconda${MINICONDA_VERSION}-${MINICONDA_RELEASE}-Linux-x86_64.sh" --output /tmp/miniconda.sh && \
     bash /tmp/miniconda.sh -b -f -p "${MINICONDA_HOME}" && \
     rm /tmp/miniconda.sh && \
     conda clean -tipy && \
-    echo "PATH=${MINICONDA_HOME}/bin:\${PATH}" > /etc/profile.d/miniconda.sh
-
-# Install pyspark
-RUN set -ex && \
-    pip install --no-cache pyspark[$SPARK_EXTRAS]==${SPARK_VERSION}
-
-# Install hadoop common
-RUN set -ex && \
+    echo "PATH=${MINICONDA_HOME}/bin:\${PATH}" > /etc/profile.d/miniconda.sh && \
+    pip install --no-cache pyspark[$SPARK_EXTRAS]==${SPARK_VERSION} && \
     curl -s -L --url "https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" --output /tmp/hadoop-${HADOOP_VERSION}.tar.gz && \
     mkdir -p ${HADOOP_HOME} && \
-    tar -xzf /tmp/hadoop-${HADOOP_VERSION}.tar.gz -C /usr/local/hadoop
-
-# Create spark profile
-RUN set -ex && \
+    tar -xzf /tmp/hadoop-${HADOOP_VERSION}.tar.gz -C /usr/local/hadoop && \
     echo "#!/bin/bash" > /etc/profile.d/spark.sh && \
     echo "export SPARK_HOME=$(python ${MINICONDA_HOME}/bin/find_spark_home.py)" >> /etc/profile.d/spark.sh && \
     echo "export SPARK_DIST_CLASSPATH=$(hadoop classpath):${HADOOP_HOME}/share/hadoop/tools/lib/*" >> /etc/profile.d/spark.sh && \
-    chmod +x /etc/profile.d/spark.sh
-
-# Clean up
-RUN set -ex && \
+    chmod +x /etc/profile.d/spark.sh && \
     apt-get remove -y curl bzip2 && \
     apt-get autoremove -y && \
     apt-get clean && \

@@ -22,7 +22,9 @@ You should look the hadoop-aws compatible dependencies versions in
 https://hadoop.apache.org/docs/r3.2.0/hadoop-aws/dependency-analysis.html.
 
 ## Building the imamge
+```bash
 docker build -t IMAGE_NAME .
+```
 
 ## Running the container
 

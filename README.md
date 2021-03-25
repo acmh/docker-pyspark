@@ -6,12 +6,14 @@ PySpark docker container based on OpenJDK and Miniconda 3.
 
 The main difference from the godatadriven/pyspark image is that you can change the following arguments:
 
+```
 MINICONDA_VERSION=3
 MINICONDA_RELEASE=py38_4.9.2
 PYTHON_VERSION=3.8
 HADOOP_VERSION=3.2.0
 SPARK_VERSION=3.1.1
 SPARK_EXTRAS=
+```
 
 ### Warning when modifying spark and hadoop versions
 Spark version library are pre-packaged for a specific Hadoop version.
